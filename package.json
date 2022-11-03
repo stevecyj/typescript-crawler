@@ -8,5 +8,11 @@
     "dev": "ts-node ./src/crawler.ts"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "superagent": "^8.0.3"
+  },
+  "devDependencies": {
+    "@types/superagent": "^4.1.15"
+  }
 }
