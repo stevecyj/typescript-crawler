@@ -1,15 +1,16 @@
-import superagent from 'superagent'
+import superagent from 'superagent';
 class Crawler {
-  private secret = 'secretKey'
-  private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`
-  private rawHTML = ''
+  private secret = 'secretKey';
+  private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
+  private rawHTML = '';
+
   async getRawHtml() {
-    const result = await superagent.get(this.url)
-    this.rawHTML = result.text
+    const result = await superagent.get(this.url);
+    this.rawHTML = result.text;
   }
   constructor() {
-    this.getRawHtml()
+    this.getRawHtml();
   }
 }
 
-const crawler = new Crawler()
+const crawler = new Crawler();
