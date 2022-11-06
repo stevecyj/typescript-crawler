@@ -1,9 +1,20 @@
+import fs from 'fs';
+import path from 'path';
 import superagent from 'superagent';
 import cheerio from 'cheerio';
 
 interface Course {
   title: string;
   count: number;
+}
+
+interface CourseInfo {
+  time: number;
+  data: Course[];
+}
+
+interface Content {
+  [propName: string]: Course[];
 }
 class Crawler {
   private secret = 'secretKey';
@@ -13,14 +24,30 @@ class Crawler {
   constructor() {
     this.initSpiderProcess();
   }
+
   async initSpiderProcess() {
+    const filePath = path.resolve(__dirname, '../data/course.json');
     const rawHtml = await this.getRawHtml();
-    this.getCourseInfo(rawHtml);
+    const courseInfo = this.getCourseInfo(rawHtml);
+    const fileContent = this.generateJsonContent(courseInfo);
+    fs.writeFileSync(filePath, JSON.stringify(fileContent));
   }
+
+  generateJsonContent(courseInfo: CourseInfo) {
+    const filePath = path.resolve(__dirname, '../data/course.json');
+    let fileContent: Content = {};
+    if (fs.existsSync(filePath)) {
+      fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    }
+    fileContent[courseInfo.time] = courseInfo.data;
+    return fileContent;
+  }
+
   async getRawHtml() {
     const result = await superagent.get(this.url);
     return result.text;
   }
+
   getCourseInfo(html: string) {
     const $ = cheerio.load(html);
     const courseItems = $('.course-item');
@@ -32,11 +59,11 @@ class Crawler {
       const count = parseInt(descs.eq(1).text().split('：')[1], 10);
       courseInfos.push({ title, count });
     });
-    const result = {
+
+    return {
       time: new Date().getTime(),
       data: courseInfos,
     };
-    console.log(result);
   }
 }
 
