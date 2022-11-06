@@ -6,17 +6,20 @@ interface Course {
   count: number;
 }
 class Crawler {
-  constructor() {
-    this.getRawHtml();
-  }
-
   private secret = 'secretKey';
   private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
   private rawHTML = '';
 
+  constructor() {
+    this.initSpiderProcess();
+  }
+  async initSpiderProcess() {
+    const rawHtml = await this.getRawHtml();
+    this.getCourseInfo(rawHtml);
+  }
   async getRawHtml() {
     const result = await superagent.get(this.url);
-    this.getCourseInfo(result.text);
+    return result.text;
   }
   getCourseInfo(html: string) {
     const $ = cheerio.load(html);
