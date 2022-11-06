@@ -30,7 +30,11 @@ class Crawler {
     const rawHtml = await this.getRawHtml();
     const courseInfo = this.getCourseInfo(rawHtml);
     const fileContent = this.generateJsonContent(courseInfo);
-    fs.writeFileSync(this.filePath, JSON.stringify(fileContent));
+    this.writeFile(JSON.stringify(fileContent));
+  }
+
+  private writeFile(fileContent: string) {
+    fs.writeFileSync(this.filePath, fileContent);
   }
 
   generateJsonContent(courseInfo: CourseInfo) {
