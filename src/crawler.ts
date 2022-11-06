@@ -2,14 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import superagent from 'superagent';
 import DellAnalyzer from './dellAnalyzer';
+
+interface Analyzer {
+  analyze: (html: string, filePath: string) => string;
+}
 class Crawler {
-  constructor(private analyzer: any) {
+  constructor(private url: string, private analyzer: Analyzer) {
     this.initSpiderProcess();
   }
 
   private filePath = path.resolve(__dirname, '../data/course.json');
-  private secret = 'secretKey';
-  private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
   private rawHTML = '';
 
   async initSpiderProcess() {
@@ -28,5 +30,8 @@ class Crawler {
   }
 }
 
+const secret = 'secretKey';
+const url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
+
 const analyzer = new DellAnalyzer();
-const crawler = new Crawler(analyzer);
+const crawler = new Crawler(url, analyzer);
