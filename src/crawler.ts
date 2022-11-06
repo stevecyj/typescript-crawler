@@ -20,24 +20,23 @@ class Crawler {
   private secret = 'secretKey';
   private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
   private rawHTML = '';
+  private filePath = path.resolve(__dirname, '../data/course.json');
 
   constructor() {
     this.initSpiderProcess();
   }
 
   async initSpiderProcess() {
-    const filePath = path.resolve(__dirname, '../data/course.json');
     const rawHtml = await this.getRawHtml();
     const courseInfo = this.getCourseInfo(rawHtml);
     const fileContent = this.generateJsonContent(courseInfo);
-    fs.writeFileSync(filePath, JSON.stringify(fileContent));
+    fs.writeFileSync(this.filePath, JSON.stringify(fileContent));
   }
 
   generateJsonContent(courseInfo: CourseInfo) {
-    const filePath = path.resolve(__dirname, '../data/course.json');
     let fileContent: Content = {};
-    if (fs.existsSync(filePath)) {
-      fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    if (fs.existsSync(this.filePath)) {
+      fileContent = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
     }
     fileContent[courseInfo.time] = courseInfo.data;
     return fileContent;
