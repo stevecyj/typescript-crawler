@@ -3,7 +3,7 @@ import path from 'path';
 import superagent from 'superagent';
 import DellAnalyzer from './dellAnalyzer';
 
-interface Analyzer {
+export interface Analyzer {
   analyze: (html: string, filePath: string) => string;
 }
 class Crawler {
@@ -31,7 +31,7 @@ class Crawler {
 }
 
 const secret = 'secretKey';
-const url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
+const url = `http://www.dell-lee.com/typescript/demo.html?secret=${secret}`;
 
 const analyzer = new DellAnalyzer();
-const crawler = new Crawler(url, analyzer);
+new Crawler(url, analyzer);

@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import cheerio from 'cheerio';
 
+import { Analyzer } from './crawler';
+
 interface Course {
   title: string;
   count: number;
@@ -16,7 +18,7 @@ interface Content {
   [propName: string]: Course[];
 }
 
-export default class DellAnalyzer {
+export default class DellAnalyzer implements Analyzer {
   constructor() {}
   private filePath = path.resolve(__dirname, '../data/course.json');
   private getCourseInfo(html: string) {
